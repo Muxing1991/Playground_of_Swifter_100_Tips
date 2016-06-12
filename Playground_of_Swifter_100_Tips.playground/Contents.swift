@@ -74,10 +74,26 @@ let myArr = ["yellow", "black", "silver"]
 for color in MyReverseSequence(array: myArr){
   print(color, terminator: " ")
 }
+print()
+
+/******************************************************************************/
+/******************************************************************************/
+//多元组（Tuple）
+func tupleSwap<T>(inout a a: T, inout b: T){
+  (a, b) = (b,a)
+}
 
 
+var tupleBlackColor = "black", tupleWhiteColor = "white"
+tupleSwap(a: &tupleBlackColor, b: &tupleWhiteColor)
+print("tupleBlackColor = \(tupleBlackColor)")
+print("tupleWhiteColor = \(tupleWhiteColor)")
 
+var rect = CGRect(x: 0, y: 0, width: 100, height: 100)
+var small: CGRect
+var large: CGRect
+//这个方法返回被分割的 和 剩余的多元组 .MinXEdge表示从横坐标的最小开始数
+(small, large) = rect.divide(20, fromEdge: .MinXEdge)
 
-
-
-
+print(small)
+print(large)
