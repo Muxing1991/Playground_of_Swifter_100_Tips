@@ -140,13 +140,13 @@ var isPrinted = false
 var arr1 = ["a"]
 var autoclosureResult = isPrinted && arr1.removeFirst() == "a"
 print(arr1)
-//&& 的实现 （我的猜测）
-func &&<T : BooleanType, U : BooleanType>(lhs: T, @autoclosure rhs: () -> U) -> Bool{
+//&& 的实现 （我的猜测）函数的声明来自于Dash
+func &&<T : BooleanType, U : BooleanType>(lhs: T, @autoclosure rhs: () throws -> U) -> Bool{
   if !lhs.boolValue{
     return false
   }
   else {
-     return rhs().boolValue
+     return try! rhs().boolValue
   }
 }
 //不用为rhs传入一个() -> Bool 的自动闭包 而是@autoclosure自动把rhs表达式封装成闭包 延迟求值
