@@ -97,3 +97,57 @@ var large: CGRect
 
 print(small)
 print(large)
+
+/******************************************************************************/
+/******************************************************************************/
+//@autoclosure 和 ??
+//将一句表达式自动封装成一个闭包
+func argIsFunc(aFunc: () -> Bool){
+  if aFunc(){
+    print("true")
+  }
+  else{
+    print("false")
+  }
+}
+//完整的闭包表达式
+argIsFunc({() -> Bool in return 2 > 1})
+argIsFunc({return 2 > 1})
+argIsFunc({2 > 1})
+argIsFunc{2 < 1}
+
+//如果使用@autoclosure 就可以用括号() 里面的表达式会自动封装成闭包
+func argIsFunc2(@autoclosure aFunc: () -> Bool){
+  if aFunc(){
+    print("true")
+  }
+  else{
+    print("false")
+  }
+}
+
+
+//@autoclosure 的作用就是让你能够延迟求值 如果这个表达式是耗费计算的话 效果更好
+//??
+var level: Int?
+var startLevel = 1
+var currentLevel = level ?? startLevel
+//func ??<T>(optional: T?, @autoclosure defaultValue: () throws -> T) -> T
+//func ??<T>(optional: T?, @autoclosure defaultValue: () throws -> T?) -> T?
+//defaultValue 是自动闭包 如果不需要执行就不需要准备与计算
+//注意  @autoclosure 是只能用于 () -> SomeType
+var isPrinted = false
+var arr1 = ["a"]
+var autoclosureResult = isPrinted && arr1.removeFirst() == "a"
+print(arr1)
+//&& 的实现 （我的猜测）
+func &&<T : BooleanType, U : BooleanType>(lhs: T, @autoclosure rhs: () -> U) -> Bool{
+  if !lhs.boolValue{
+    return false
+  }
+  else {
+     return rhs().boolValue
+  }
+}
+//不用为rhs传入一个() -> Bool 的自动闭包 而是@autoclosure自动把rhs表达式封装成闭包 延迟求值
+
