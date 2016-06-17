@@ -151,3 +151,74 @@ func &&<T : BooleanType, U : BooleanType>(lhs: T, @autoclosure rhs: () throws ->
 }
 //不用为rhs传入一个() -> Bool 的自动闭包 而是@autoclosure自动把rhs表达式封装成闭包 延迟求值
 
+/******************************************************************************/
+/******************************************************************************/
+
+//Optional Chaining 
+
+//在 optional chaining 中 可空链对象的返回void的函数 返回的是Void?
+class Toy{
+  let name: String
+  init(name: String){
+    self.name = name
+  }
+}
+
+class Pet{
+  var toy: Toy?
+}
+class Child{
+  var pet: Pet?
+}
+
+extension Toy{
+  func play(){}
+}
+
+let playClosure = {(child: Child) -> Void? in child.pet?.toy?.play()}
+//不写? 也不会报错
+let xiaoming = Child()
+if let result = playClosure(xiaoming){
+  print("fun")
+}
+else {
+  print("not fun")
+}
+if playClosure(xiaoming) != nil{
+  print("调用成功")
+}
+else {
+  print("调用失败")
+}
+//可以通过判断可空链的void方法是否为nil来判断是否能够调用成功
+
+
+/******************************************************************************/
+/******************************************************************************/
+//操作符 
+struct  Vector2D{
+  var x = 0.0
+  var y = 0.0
+}
+
+let v1 = Vector2D(x: 1.22, y: 2.33)
+let v2 = Vector2D(x: 0.5, y: 0.7)
+
+func +(lhs: Vector2D, rhs: Vector2D) -> Vector2D{
+  return Vector2D(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
+}
+
+//负号要加前缀 prefix
+prefix func -(operand: Vector2D) -> Vector2D{
+  return Vector2D(x: -operand.x, y: -operand.y)
+}
+
+func +* (lhs: Vector2D, rhs: Vector2D) -> Double{
+  return lhs.x * rhs.x + lhs.y * rhs.y
+}
+
+infix operator +* {
+  associativity none
+  precedence 160
+}
+//这里的语法很奇怪 大概因为它既不是class struct 或者 func 吧 也没有智能提示
