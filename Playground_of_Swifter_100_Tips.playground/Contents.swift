@@ -222,3 +222,31 @@ infix operator +* {
   precedence 160
 }
 //这里的语法很奇怪 大概因为它既不是class struct 或者 func 吧 也没有智能提示
+
+
+/******************************************************************************/
+/******************************************************************************/
+//func 的参数修饰
+//swift语言 参数的修饰默认是let 所以不能在func 里对参数进行修改
+func incrementor(inout input: Int) {
+  //return ++input 报错
+  // 必须在参数上用 inout修饰
+   input += 1 //这种修饰方式 就不用返回了
+}
+
+var funcModifyInput = 7
+incrementor(&funcModifyInput)
+print(funcModifyInput)
+
+//在层级间保证 参数的修饰是一致的
+func makeIncrementor(addNumber: Int) -> (inout Int) -> (){
+  func incrementor(inout input: Int) -> (){
+    input += addNumber
+  }
+  return incrementor
+}
+
+let incrementorByMI = makeIncrementor(7)
+incrementorByMI(&funcModifyInput)
+print(funcModifyInput)
+
