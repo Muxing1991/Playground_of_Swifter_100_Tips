@@ -250,3 +250,20 @@ let incrementorByMI = makeIncrementor(7)
 incrementorByMI(&funcModifyInput)
 print(funcModifyInput)
 
+
+/******************************************************************************/
+/******************************************************************************/
+
+//字面量转换
+//这一组接口用于将 例如 整型 字符串 布尔值 数组 数组字面量 字典字面量 nil字面量 这些字面量转换成对应的类型
+//Int 为原始值的枚举
+enum MyBool: Int{
+  case MyTrue, MyFalse
+}
+extension MyBool: BooleanLiteralConvertible{
+  init(booleanLiteral value: Self.BooleanLiteralType) {
+    //在这个接口中 
+    self = value ? MyTrue : MyFalse
+  }
+}
+
