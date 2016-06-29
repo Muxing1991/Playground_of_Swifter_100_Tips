@@ -78,7 +78,7 @@ print()
 
 /******************************************************************************/
 /******************************************************************************/
-//多元组（Tuple）
+//4.多元组（Tuple）
 func tupleSwap<T>(inout a a: T, inout b: T){
   (a, b) = (b,a)
 }
@@ -100,7 +100,7 @@ print(large)
 
 /******************************************************************************/
 /******************************************************************************/
-//@autoclosure 和 ??
+//5.@autoclosure 和 ??
 //将一句表达式自动封装成一个闭包
 func argIsFunc(aFunc: () -> Bool){
   if aFunc(){
@@ -154,7 +154,7 @@ func &&<T : BooleanType, U : BooleanType>(lhs: T, @autoclosure rhs: () throws ->
 /******************************************************************************/
 /******************************************************************************/
 
-//Optional Chaining 
+//6.Optional Chaining
 
 //在 optional chaining 中 可空链对象的返回void的函数 返回的是Void?
 class Toy{
@@ -195,7 +195,7 @@ else {
 
 /******************************************************************************/
 /******************************************************************************/
-//操作符 
+//7.操作符
 struct  Vector2D{
   var x = 0.0
   var y = 0.0
@@ -226,7 +226,7 @@ infix operator +* {
 
 /******************************************************************************/
 /******************************************************************************/
-//func 的参数修饰
+//8.func 的参数修饰
 //swift语言 参数的修饰默认是let 所以不能在func 里对参数进行修改
 func incrementor(inout input: Int) {
   //return ++input 报错
@@ -254,16 +254,62 @@ print(funcModifyInput)
 /******************************************************************************/
 /******************************************************************************/
 
-//字面量转换
+//9.字面量转换
 //这一组接口用于将 例如 整型 字符串 布尔值 数组 数组字面量 字典字面量 nil字面量 这些字面量转换成对应的类型
 //Int 为原始值的枚举
 enum MyBool: Int{
   case MyTrue, MyFalse
 }
 extension MyBool: BooleanLiteralConvertible{
-  init(booleanLiteral value: Self.BooleanLiteralType) {
-    //在这个接口中 
+  init(booleanLiteral value: BooleanLiteralType) {
+    //在这个接口中 BooleanLiteralType 就是 Bool  可以用true 和 false 来初始化这个MyBool类型
     self = value ? MyTrue : MyFalse
   }
 }
+//实现了接口后 就把bool值 直接赋值
+var myTrue09: MyBool = true
+var myFalse09: MyBool = false
+print(myTrue09.rawValue)
+print(myFalse09.rawValue)
 
+//实现 StringLiteralConvertible 
+class Person09: StringLiteralConvertible{
+  let name: String
+  init(name value: String){
+    self.name = value
+  }
+  //需要是required 而且是 no－final 参数类型都是String 这样就对接口中的typealias进行了赋值
+  //这里调用了指定构造器 所以要标注 convenience
+  required convenience init(stringLiteral value: String) {
+    self.init(name: value)
+  }
+  
+ required convenience init(unicodeScalarLiteral value: String) {
+    self.init( name: value)
+  }
+  
+ required convenience init(extendedGraphemeClusterLiteral value: String) {
+    self.init(name: value)
+  }
+  
+}
+
+var person09: Person09 = "liubei"
+//这样的声明方式可能会给人造成迷惑 慎重使用
+print(person09.name)
+
+class MyTest09: IntegerLiteralConvertible{
+  var age: Int
+  init(age value: Int){
+    self.age = value
+  }
+  convenience required init(integerLiteral value: IntegerLiteralType) {
+    self.init(age: value)
+  }
+}
+
+var mt09: MyTest09 = 20
+print(mt09.age)
+
+/******************************************************************************/
+/******************************************************************************/
