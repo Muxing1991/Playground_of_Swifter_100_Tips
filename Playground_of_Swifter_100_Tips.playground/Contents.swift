@@ -313,3 +313,85 @@ print(mt09.age)
 
 /******************************************************************************/
 /******************************************************************************/
+
+//10.接口和类方法中的Self
+//有一种情况 接口中的方法使用的类型(参数、返回值)为实现该接口本身(也包括子类) 用Self指代
+
+protocol Copyable10{
+  func copy() -> Self
+}
+
+//使用self.dynamicType 获取在运行时的实际类型 这里调用了init方法 所以要求子类也要实现
+class MyClass10: Copyable10{
+  func copy() -> Self {
+    let result = self.dynamicType.init()
+    return result
+  }
+  
+  required init(){
+    
+  }
+}
+
+/******************************************************************************/
+/******************************************************************************/
+//11.属性观察 property observers
+
+class MyClass11{
+  var date: NSDate{
+    willSet{
+      let d = date
+      print("the \(d)  will trans to \(newValue)")
+    }
+    didSet{
+      print("old date is \(oldValue), now is \(date)")
+    }
+  }
+  
+  init(){
+    date = NSDate()
+  }
+}
+
+let foo11 = MyClass11()
+
+foo11.date = foo11.date.dateByAddingTimeInterval(1024)
+
+//一个类的计算属性 无法同时添加property observers 只能通过子类的重写
+class Father11{
+  var age: Int {
+    get{
+      print("get age")
+      return 11
+    }
+    set{
+      print("set age")
+    }
+  }
+}
+
+//didSet观察器需要提前访问并保存数据 willSet也需要保存当前数据 所以先执行了两次get
+class Child11: Father11{
+ override var age: Int{
+    willSet{
+      print("will set \(age) in child to \(newValue)")
+    }
+    didSet{
+      print("did set \(oldValue) in child to \(age)")
+    }
+  }
+}
+
+var sub11 = Child11()
+print(sub11.age)
+
+
+sub11.age  = 0
+
+
+
+
+
+
+
+
